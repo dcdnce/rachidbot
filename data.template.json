@@ -1,5 +1,6 @@
 {
 	"discord": {
+		"clientID": "YOUR_CLIENT_ID_HERE",
 		"token": "YOUR_TOKEN_HERE"
 	},
 	"bot": {
