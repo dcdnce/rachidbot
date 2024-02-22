@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  rachidbot:
+    container_name: rachidbot
+    build: .
+    restart: always
