@@ -1,42 +1,33 @@
 const Discord = require('discord.js');
+const { fetchInformations } = require('./minecraft.js');
+const data = require('./data.json');
+
 const client = new Discord.Client({
 	intents: [
 		Discord.GatewayIntentBits.Guilds,
-		Discord.GatewayIntentBits.GuildMessages,
-		Discord.GatewayIntentBits.MessageContent
 	]
 });
-const token = 'MTIwOTg3MDIzMzcwMDAwODAxNg.GBO8as.dSLI5NitNuoOHPoS_3zif52eFAfnbR_I7lC4oA';
+
+async function updateChannel(channel) {
+	const status = await fetchInformations(data.bot.serverIP).catch(_ => null);
+	const name = status != null ? `🟢-online︱${status.players.online}` : '🔴-offline';
+
+	channel.setName(name).catch(console.error);
+}
+
 
 client.on('ready', async () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+	console.log(`Logged in as ${client.user.tag}!`);
 
-	try {
-		const guild = await client.guilds.fetch('1207975897521459231');
-		const channel = guild.channels.cache.get('1209873848049344512');
+	const guild = await client.guilds.fetch(data.bot.guildID).catch(_ => null);
+	if (guild == null) return console.error('Failed to fetch the guild');
 
-        setInterval(() => {
-			fetch('https://api.mcstatus.io/v2/status/java/84.235.234.2')
-				.then(response => {
-					if (!response.ok)
-						throw new Error("Failed fetching")
-					return (response.json())
-				}).then(async data => {
-					const playersOnline = data.players.online;
-					await channel.setName("Online︱" + playersOnline);
-				});
-         	}, 6000);
-	} catch (error) {
-        console.error('Erreur : ', error);
-    }
+	const channel = await guild.channels.fetch(data.bot.channelID).catch(_ => null);
+	if (channel == null) return console.error('Failed to fetch the channel');
+
+
+	updateChannel(channel);
+	setInterval(() => updateChannel(channel), 10_000);
 });
 
-client.on('messageCreate', msg => {
-	console.log(msg.content);
-    if (msg.content === '!ping') {
-        msg.reply('Pong!');
-    }
-});
-
-client.login(token);
-
+client.login(data.discord.token);

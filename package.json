@@ -11,5 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20"
   }
 }
