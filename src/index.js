@@ -1,6 +1,6 @@
 const { Client, Events, GatewayIntentBits, Collection, SlashCommandBuilder } = require('discord.js');
 const { fetchInformations } = require('./minecraft.js');
-const data = require('./data.json');
+const data = require('../resources/data.json');
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds]

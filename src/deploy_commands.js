@@ -1,5 +1,5 @@
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
-const data = require('./data.json');
+const data = require('../data.json');
 
 const commands = [
 	(new SlashCommandBuilder().setName('players').setDescription('Shows the player list')).toJSON(),
